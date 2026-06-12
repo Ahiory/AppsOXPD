@@ -1,0 +1,113 @@
+    
+.buttonn {
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.2);
+    text-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.2);
+    text-decoration: none !important;
+    text-transform: uppercase;
+    color: #fff !important;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px 10px;
+    margin: 0 3px;
+    width: 400px;
+    position: relative;
+    display: inline-block;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    -o-transition: all 0.1s;
+    transition: all 0.1s;
+}
+.buttonn:active {
+    -webkit-transform: translateY(7px);
+    -moz-transform: translateY(7px);
+    -o-transform: translateY(7px);
+    transform: translateY(7px);
+}
+.button2 {
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.2);
+    text-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.2);
+    text-decoration: none !important;
+    text-transform: uppercase;
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 25px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 400px;
+    height: 60px;
+    margin: 0 3px;
+    position: relative;
+    
+    display: inline-block;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    -o-transition: all 0.1s;
+    transition: all 0.1s;
+}
+.button2:active {
+    -webkit-transform: translateY(7px);
+    -moz-transform: translateY(7px);
+    -o-transform: translateY(7px);
+    transform: translateY(7px);
+}
+
+.button-purple {
+    background: #ba54d3;
+    box-shadow: 0 10px 0 #8e29a7,
+                0 11px 5px hsla(0, 0%, 0%, 0.5);
+}
+.button-purple:active {
+    box-shadow: 0 3px 0 #8e29a7,
+                0 4px 6px hsla(0, 0%, 0%, 0.7);
+}
+.buttonn-orange {
+    background: #005ab2;
+    box-shadow: 0 10px 0 #005ab2,
+                0 11px 5px hsla(0, 0%, 0%, 0.5);
+}
+.buttonn-orange:active {
+    box-shadow: 0 3px 0 #005ab2,
+                0 4px 6px hsla(0, 0%, 0%, 0.7);
+}
+
+.buttonn-green {
+    background: green;
+    box-shadow: 0 10px 0 #005ab2,
+                0 11px 5px hsla(0, 0%, 0%, 0.5);
+    left: 35%;    
+    top: 200px;
+
+}
+.buttonn-green:active {
+    box-shadow: 0 3px 0 green,
+                0 4px 6px hsla(0, 0%, 0%, 0.7);
+
+}
+.button-pink {
+    background: #FF1493;
+    box-shadow: 0 10px 0 #cc006e,
+                0 11px 5px hsla(0, 0%, 0%, 0.5);
+}
+.button-pink:active {
+    box-shadow: 0 3px 0 #cc006e,
+                0 4px 6px hsla(0, 0%, 0%, 0.7);
+}
+.button-blue {
+    background: #1e90ff;
+    box-shadow: 0 10px 0 #005ab2,
+                0 11px 5px hsla(0, 0%, 0%, 0.5);
+}
+.button-blue:active {
+    box-shadow: 0 3px 0 #005ab2,
+                0 4px 6px hsla(0, 0%, 0%, 0.7);
+}
+.button-black {
+    background: #00050a;
+    box-shadow: 0 10px 0 #031323,
+                0 11px 5px hsla(0, 0%, 0%, 0.5);
+}
+.button-black:active {
+    box-shadow: 0 3px 0 #031323,
+                0 4px 6px hsla(0, 0%, 0%, 0.7);
+}
+

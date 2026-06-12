@@ -1,0 +1,93 @@
+body {
+    background-color: black;
+    margin: 0;
+    padding: 0;
+}
+
+span{
+    color: black;
+    font-family: "Verdana", Helvetica, sans-serif;
+    font-size: 25px;
+    position: absolute;
+    left: 12%;
+    top: 80px;
+}
+
+.text{
+    height: 40px;
+    width: 200px;
+    border-radius: 0.5em;
+    display: block;
+    position: absolute;
+    left: 35%;
+    top: 140px;
+}
+
+.button {
+    height: 40px;
+    width: 200px;
+    border-radius: 0.5em;
+    display: block;
+    position: absolute;
+    left: 35%;    
+    top: 200px;
+    background: green;
+    color: white;
+}
+
+table{
+
+    display: block;
+    position: absolute;
+    left: 5%;
+    top: 130px;
+}
+
+tr{
+    width: 50px;
+    height: 10px;
+}
+
+td{
+    text-align: center;
+    width: 300px;
+    height: 75px;
+}
+
+.button {
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.2);
+    text-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.2);
+    text-decoration: none !important;
+    text-transform: uppercase;
+    color: #fff !important;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 0 3px;
+    position: relative;
+    display: inline-block;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    -o-transition: all 0.1s;
+    transition: all 0.1s;
+}
+.button:active {
+    -webkit-transform: translateY(7px);
+    -moz-transform: translateY(7px);
+    -o-transform: translateY(7px);
+    transform: translateY(7px);
+}
+
+.button-green {
+    background: green;
+    box-shadow: 0 10px 0 green,
+                0 11px 5px hsla(0, 0%, 0%, 0.5);
+    left: 35%;    
+    top: 200px;
+
+}
+.button-green:active {
+    box-shadow: 0 3px 0 green,
+                0 4px 6px hsla(0, 0%, 0%, 0.7);
+
+}

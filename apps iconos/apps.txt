@@ -1,0 +1,37 @@
+Encuesta de servicio
+http://www.desarrolloscarvajal.com/desarrollos/encuestagraficos/index.php
+Estadisticas encuesta 
+http://desarrolloscarvajal.com/desarrollos/encuestagraficos/estadisticas.php
+
+Recoleccion de toner 
+http://www.desarrolloscarvajal.com/desarrollos/recoleccion2/index.html
+
+Capacitacion
+https://www.desarrolloscarvajal.com/desarrollos/capacitacion/index.html
+
+Generar datos impresora
+http://www.desarrolloscarvajal.com/desarrollos/prueba/index.html
+
+Prueba impresion
+http://www.desarrolloscarvajal.com/desarrollos/imprimir/index.html
+
+No olvidar habilitar CORS
+Seguridad --> Seguridad de servicios Web Habilitar CORS (Cross-Origin Resource Sharing)
+
+Intalacion de carpetas compartidas
+
+Iniciar conjuntos rapidos 
+Crear carpeta en el escritorio
+prototipo de ruta 
+\\CTSCO2CE3472F4W\Users\esnmahsa\Documents/trabajos
+trabajos (file://CTSCO2CE3472F4W/Users/esnmahsa/Desktop/trabajos)
+trabajos (file://CTSCO2CE3472F4W/Users/esnmahsa/Documents/trabajos)
+
+
+Dominio :  carvajal.com.co
+Usuario : esanchezmah  
+Contraseña del equipo que se accede
+crear notoficaciones 
+Sufijo nombre de archivo
+_%DEVICE_DATE_YYYYMMDD%_%DEVICE_TIME_HHMMSS%
+Crear xml metadatos

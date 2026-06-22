@@ -1,0 +1,40 @@
+USE Carvajal_HP_Presmed_Local;
+GO
+
+CREATE OR ALTER PROCEDURE dbo.prs_asocia_adjunto_soli_externo
+    @prm_SOLI_AUTO BIGINT,
+    @prm_USUARIO   CHAR(15),
+    @prm_TIPO      VARCHAR(10),
+    @prm_FILENAME  VARCHAR(255),
+    @prm_NOMBRE    VARCHAR(255),
+    @prm_PESO_MB   DECIMAL(10,2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.SolicitudesAutoLocal WHERE SolicitudAuto = @prm_SOLI_AUTO)
+    BEGIN
+        SELECT 1 AS CODIGO, 'Solicitud no encontrada' AS DESCRIPCION;
+        RETURN;
+    END
+
+    MERGE dbo.SolicitudAdjuntosLocal AS T
+    USING (
+        SELECT @prm_SOLI_AUTO AS SolicitudAuto, @prm_TIPO AS CodigoTipo
+    ) AS S
+    ON T.SolicitudAuto = S.SolicitudAuto AND T.CodigoTipo = S.CodigoTipo
+    WHEN MATCHED THEN
+        UPDATE SET
+            NombreArchivo = @prm_NOMBRE,
+            FilenameApi = @prm_FILENAME,
+            PesoMb = @prm_PESO_MB,
+            EstadoCarga = 'CARGADO',
+            FechaCarga = GETDATE(),
+            UsuarioRed = @prm_USUARIO
+    WHEN NOT MATCHED THEN
+        INSERT (SolicitudAuto, CodigoTipo, NombreArchivo, FilenameApi, PesoMb, EstadoCarga, FechaCarga, UsuarioRed)
+        VALUES (@prm_SOLI_AUTO, @prm_TIPO, @prm_NOMBRE, @prm_FILENAME, @prm_PESO_MB, 'CARGADO', GETDATE(), @prm_USUARIO);
+
+    SELECT 0 AS CODIGO, 'Adjunto asociado correctamente' AS DESCRIPCION;
+END
+GO

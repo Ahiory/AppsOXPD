@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Ultimos recibos</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="carvajal-logo.ico" />
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background-image: url('home-carvajal.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover; 
+            overflow: hidden; 
+        }
+
+        /* ==========================================
+           EFECTO CRISTAL APLICADO A LA TABLA
+           ========================================== */
+        #tabla {   
+            width: 100%;
+            text-align: center;
+            border-collapse: separate; /* Necesario para que funcione el border-radius */
+            border-spacing: 0;
+            
+            /* Efecto Glassmorphism */
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+            
+            border-radius: 12px;
+            overflow: hidden; /* Asegura que el color de los <th> no se salga de las esquinas redondeadas */
+        }
+
+        #tabla th {
+            background-color: rgba(0, 84, 135, 0.9); /* Azul corporativo ligeramente translúcido */
+            color: white;
+            padding: 12px 10px;
+            font-size: 15px;
+        }
+
+        #tabla td {
+            font-size: 14px;
+            padding: 10px 5px;
+            vertical-align: middle; 
+            color: #005487; /* Texto azul oscuro para contraste contra el cristal claro */
+            font-weight: bold; /* Negrita para mejorar la lectura en pantallas de impresora */
+            border-bottom: 1px solid rgba(0, 84, 135, 0.15); /* Línea divisoria muy sutil entre filas */
+        }
+
+        /* Quitar la línea divisoria de la última fila */
+        #tabla tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Contenedor con las posiciones absolutas EXACTAS que tenías -->
+    <div style="width: 94%; height: 250px; position: absolute; left: 3%; top: 10%;">
+        <table id="tabla">
+            <tr>
+                <th style="text-align: center;">Periodo de Pago</th>
+                <th style="text-align: center;">Mes</th>
+                <th style="text-align: center;">Tipo de Nomina</th>
+                <th style="text-align: center;">Neto</th>
+                <th style="text-align: center; width: 90px;">Acción</th>
+            </tr>
+
+            <tr>
+                <td>01/01/2026 - 28/01/2026</td>
+                <td>Enero</td>
+                <td>Proceso de nomina</td>
+                <td>$ 2'112.416.00</td>
+                <td>
+                    <a href="pago1.html" class="btn btn-info btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-top; margin-right: 2px;">
+                            <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.5 9a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                        </svg> Ver
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>01/02/2026 - 27/02/2026</td>
+                <td>Febrero</td>
+                <td>Proceso de nomina</td>
+                <td>$ 2'641.032.00</td>
+                <td>
+                    <a href="pago2.html" class="btn btn-info btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-top; margin-right: 2px;">
+                            <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.5 9a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                        </svg> Ver
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>01/03/2026 - 30/03/2026</td>
+                <td>Marzo</td>
+                <td>Proceso de nomina</td>
+                <td>$ 2'541.032.00</td>
+                <td>
+                    <a href="pago1.html" class="btn btn-info btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-top; margin-right: 2px;">
+                            <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.5 9a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                        </svg> Ver
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>01/04/2026 - 30/04/2026</td>
+                <td>Abril</td>
+                <td>Proceso de nomina</td>
+                <td>$ 2'712.416.00</td>
+                <td>
+                    <a href="pago2.html" class="btn btn-info btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-top; margin-right: 2px;">
+                            <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.5 9a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                        </svg> Ver
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>01/05/2026 - 31/05/2026</td>
+                <td>Mayo</td>
+                <td>Proceso de nomina</td>
+                <td>$ 2'141.032.00</td>
+                <td>
+                    <a href="pago2.html" class="btn btn-info btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-top; margin-right: 2px;">
+                            <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.5 9a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                        </svg> Ver
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>01/06/2026 - 30/06/2026</td>
+                <td>Junio</td>
+                <td>Proceso de nomina</td>
+                <td>$ 2'541.032.00</td>
+                <td>
+                    <a href="pago1.html" class="btn btn-info btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-top; margin-right: 2px;">
+                            <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.5 9a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                        </svg> Ver
+                    </a>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+    
+    <!-- Botón Regresar con posición absoluta exacta -->
+    <input type="button" value="Regresar" class="btn btn-warning btn-lg" style="position: absolute; left: 45%; top: 85%;" onclick="location.href='inicio.html'">
+
+</body>
+</html>

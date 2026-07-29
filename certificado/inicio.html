@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Certificados laborales - Menú</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="carvajal-logo.ico" />
+    <style>
+        /* ==========================================
+           REGLA PRINCIPAL: Ocupar todo el alto y ancho
+           ========================================== */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+        body {
+            background-image: url('home-carvajal.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover; 
+            font-family: Arial, sans-serif;
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* ==========================================
+           ESTILO CRISTAL (Glassmorphism)
+           ========================================== */
+        .menu-card {
+            /* Magia del cristal */
+            background: rgba(255, 255, 255, 0.25); /* Blanco semi-transparente */
+            backdrop-filter: blur(12px); /* Efecto de desenfoque (vidrio esmerilado) */
+            -webkit-backdrop-filter: blur(12px); /* Soporte para Safari */
+            border: 1px solid rgba(255, 255, 255, 0.6); /* Borde sutil brillante */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15); /* Sombra para dar profundidad */
+            
+            border-radius: 12px;
+            color: #005487; /* Texto azul para contrastar con el fondo claro */
+            text-align: left;
+        }
+
+        .menu-card h3 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn-custom {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+            cursor: pointer;
+            border: none;
+            color: white;
+            display: block;
+        }
+
+        /* Botón Azul (Certificados) */
+        .btn-primary-custom {
+            background-color: #005487;
+            border: 1px solid #004068;
+        }
+        .btn-primary-custom:hover {
+            background-color: #004068;
+        }
+
+        /* Botón Verde (Recibos) */
+        .btn-success-custom {
+            background-color: #28a745;
+            border: 1px solid #218838;
+        }
+        .btn-success-custom:hover {
+            background-color: #218838;
+        }
+
+        /* ==========================================
+           1. PANTALLA PEQUEÑA (Max 900px)
+           ========================================== */
+        @media screen and (max-width: 900px) {
+            .menu-card {
+                width: 280px;
+                padding: 25px;
+                position: absolute;
+                top: 20%;
+                left: 30%;
+                transform: translateX(-50%);
+                z-index: 5; 
+            }
+            .close-btn {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 60px;
+                cursor: pointer;
+                z-index: 10;
+            }
+        }
+
+        /* ==========================================
+           2. PANTALLA GRANDE (Min 901px)
+           ========================================== */
+        @media screen and (min-width: 901px) {
+            .menu-card {
+                width: 320px;
+                padding: 35px;
+                position: absolute;
+                top: 25%;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 5;
+            }
+            .close-btn {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 50px;
+                cursor: pointer;
+                z-index: 10;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Botón de cierre -->
+    <div>
+       <img src="cerrar.png" class="close-btn" onclick="window.close();" alt="Cerrar">
+    </div>
+
+    <!-- Tarjeta de menú con Efecto Cristal -->
+    <div class="menu-card">
+        <h3>Bienvenido</h3>
+        
+        <button class="btn-custom btn-primary-custom" onclick="location.href='pagina1.html'">
+            Certificados Laborales
+        </button>
+        
+        <button class="btn-custom btn-success-custom" onclick="location.href='pagina2.html'">
+            Últimos Recibos
+        </button>
+    </div>
+
+    <script language="JavaScript">
+        if (window.OXPd !== undefined && window.OXPd !== null) {
+            window.OXPd.headerBackgroundColor = '#005487'; 
+            window.OXPd.headerForegroundColor = '#FFFFFF';
+            window.OXPd.footerCollapsed = true;
+        }
+    </script>
+
+</body>
+</html>

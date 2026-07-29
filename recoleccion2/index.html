@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="libs/jquery-1.11.0.min.js"></script>
+        <script src="libs/oxpddeviceinfo-2.6.0.min.js"></script>
+        <script src="libs/oxpddiscovery-2.6.0.min.js"></script>
+        <script src="main.js"></script>
+         <script src="main2.js"></script>
+        <script src="main3.js"></script>
+        <script src="//code.jquery.com/jquery-latest.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+       <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+        <script src="js/bootstrap.min.js"></script>
+       <script type="text/javascript"> 
+            window.onload = function() {
+              //funciones a ejecutar
+              getManufacturerInfo();
+              getCustomerInfo();
+            };
+        if (window.OXPd !== undefined && window.OXPd !== null) {
+            // Cambiar el color de fondo de la barra superior al azul de tu diseño
+            window.OXPd.headerBackgroundColor = '#005487'; 
+            // Cambiar el color del texto y los iconos a blanco para mantener el contraste
+            window.OXPd.headerForegroundColor = '#FFFFFF';
+            window.OXPd.footerCollapsed = true;
+        }
+        </script>
+
+        <style>
+            /* 1. Ajuste del fondo para que no se repita y cubra la pantalla */
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100vw;
+                height: 100vh;
+                background-image: url('Fondo4.png') !important;
+                background-repeat: no-repeat !important;
+                background-size: 100% 100% !important;
+                background-position: center center !important;
+                overflow: hidden;
+            }
+
+            /* 2. Centrado automático del formulario y limpieza de inputs */
+            #contenedor-formulario {
+                text-align: center; /* Centra el texto y los inputs automáticamente */
+            }
+
+            /* Diseño limpio y grande para el campo numérico */
+            #yourid {
+                display: inline-block;
+                width: 120px !important;
+                height: 70px !important;
+                font-size: 45px !important;
+                text-align: center !important;
+                border-radius: 8px; /* Bordes ligeramente redondeados */
+                margin: 0 auto;
+            }
+
+            /* Ocultar las molestas flechas (-/+) del navegador en el campo number */
+            #yourid::-webkit-outer-spin-button,
+            #yourid::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            #yourid[type=number] {
+                -moz-appearance: textfield;
+            }
+
+            /* Botón de enviar alineado al centro */
+            #btn-enviar {
+                display: inline-block;
+                margin: 0 auto;
+                font-size: 25px;
+            }
+
+            /* --- CLASE NUEVA PARA EL CONTRASTE DE LAS LETRAS --- */
+            .borde-texto {
+                text-shadow: 
+                    -2px -2px 0 #ffffff,  
+                     2px -2px 0 #ffffff,
+                    -2px  2px 0 #ffffff,
+                     2px  2px 0 #ffffff,
+                     0px  4px 8px rgba(255, 255, 255, 0.9);
+            }
+
+            /* 3. Ajustes de coordenadas para la resolución de 1024x620 */
+            @media screen and (max-width: 1024px) and (max-height: 620px) {
+                #btn-cerrar {
+                    
+                    top: 3% !important;
+                }
+                
+                #titulo-principal {
+                    top: 5% !important;
+                    left: 8% !important;
+                }
+
+                #contenedor-formulario {
+                    top: 24% !important;
+                    
+                    width: 90% !important;
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="demo20">
+            <input type="image" src="cerrar.png" id="btn-cerrar" style="position: absolute; left: 88%; top: 20px;" onclick="window.close();">
+        </div>
+        
+        <form action="regpag.php" method="POST">
+            <div id="titulo-principal" style="position: absolute;">
+                <!-- Se agregó la clase "borde-texto" aquí -->
+                <font style="color: black; font-size: 240%;" face="Comic Sans Ms,arial,verdana" class="borde-texto">
+                    <br>
+                    <strong><p>Sistema de recoleccion de suministros</p></strong>
+            <br>
+                </font>
+            </div>
+             <br>
+            <div id="contenedor-formulario" style="position: absolute; top: 15%; left: 2%; width: 620px;">
+                <!-- Se agregó la clase "borde-texto" aquí -->
+                <font style="color: black;" class="borde-texto">
+                    <br><br>
+                    <p style="font-size: 30px;">Por favor ingrese los toners a recoger</p>
+                    <br>
+                    <br>
+                    <input type="number" name="servicio" class="form-control" placeholder="0" onKeyUp="if(this.value>50){this.value='50';}else if(this.value<0){this.value='0';}" id="yourid">
+                    <br><br><br>
+                    
+                    <input type="submit" id="btn-enviar" value="Enviar" onclick="window.alert('Su solicitud de recoleccion ha sido procesada con exito. Se recolectaran ' + servicio.value + ' Toners.')" class="btn btn-success btn-lg active">
+                    <br>
+                    
+                    <input type="text" id="SerialNumber" name="serial" hidden>
+                    <input type="text" id="ipAddress" name="ip" hidden>
+                    <input type="text" id="productNumber" name="product" hidden>
+                    <input type="text" id="companyContact" name="contacto" hidden>
+                    <input type="text" id="companyName" name="empresa" hidden>
+                    <input type="text" id="deviceLocation" name="direccion" hidden>
+                    <input type="text" id="machineName" name="nombre" hidden>
+                </font>
+            </div>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Liquidación de Nómina</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="carvajal-logo.ico" />
+    
+    <script src="js/bootstrap.min.js"></script>
+    <script src="logger.js"></script>
+    <script src="libs/jquery-1.11.0.min.js"></script>
+    <script src="libs/oxpddiscovery-2.6.0.min.js"></script>
+    <script src="libs/oxpdprint-2.6.0.min.js"></script>
+    <script src="main.js"></script>
+    
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background-image: url('home-carvajal.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover; 
+            overflow: hidden; 
+        }
+
+        /* ==========================================
+           TABLA CON EFECTO CRISTAL
+           ========================================== */
+        #tabla {   
+            width: 100%;
+            text-align: center;
+            border-collapse: separate;
+            border-spacing: 0;
+            
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+            
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        #tabla th {
+            background-color: rgba(0, 84, 135, 0.9);
+            color: white;
+            padding: 10px 5px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        #tabla td {
+            font-size: 14px;
+            padding: 8px 5px;
+            vertical-align: middle; 
+            color: #005487; 
+            font-weight: bold; 
+            border-bottom: 1px solid rgba(0, 84, 135, 0.15); 
+        }
+
+        #tabla tr:last-child td, #tabla tr:last-child th {
+            border-bottom: none;
+        }
+
+        /* ==========================================
+           ESTILOS PARA EL MODAL DE CORREO
+           ========================================== */
+        .modal-glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            width: 450px;
+            margin: 0 auto; 
+            color: #005487;
+        }
+        
+        .modal-glass-card h2 {
+            font-weight: bold;
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <!-- Contenedor de Tabla con posiciones originales -->
+    <div style="width: 650px; height: 250px; position: absolute; left: 10%; top: 10%;">
+        <table id="tabla">
+            <tr>
+                <th>Concepto </th>
+                <th>Descripcion</th>
+                <th>Unidades</th>
+                <th>Devengos</th>
+                <th>Deducciones</th>
+            </tr>
+            <tr>
+                <td> 1</td>
+                <td> Sueldo Básico</td>
+                <td>30.00</td>
+                <td> $1'700.000.00</td>
+                <td> </td>
+            </tr>
+            <tr>
+                <td> 120</td>
+                <td> Subsidio de Transporte</td>
+                <td> 30.00</td>
+                <td> $180.000.00</td>
+                <td> </td>
+            </tr>
+            <tr>
+                <td> 3010</td>
+                <td> Aporte Salud (4%)</td>
+                <td> 4.00</td>
+                <td> </td>
+                <td> $68.000.00</td>
+            </tr>
+            <tr>
+                <td> 3020</td>
+                <td> Aporte Pensión (4%)</td>
+                <td> 4.00</td>
+                <td> </td>
+                <td> $68.000.00</td>
+            </tr>
+            <tr>
+                <td> 3181</td>
+                <td> Otros</td>
+                <td> 1.00</td>
+                <td> </td>
+                <td> $28.000.00</td>
+            </tr>
+            <tr>
+                <th colspan="3" style="background-color: rgba(0, 84, 135, 0.9);"> Totales</th>
+                <td>$1'880.000.00</td>
+                <td>$164.000.00</td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <th style="background-color: rgba(0, 84, 135, 0.9);">Total Neto</th>
+                <td>$1'716.000.00</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Contenedor de Botones -->
+    <div style="position: absolute; top: 75%; width: 100%; text-align: center;">
+        <input type="button" value="Regresar" class="btn btn-warning btn-lg" style="margin: 0 10px;" onclick="location.href='pagina2.html'">
+        <input type="button" value="Imprimir" onclick="main.print('http://desarrolloscarvajal.com/desarrollos/certificado/archivos/pago1.pdf');" style="margin: 0 10px;" class="btn btn-success btn-lg">
+        <input type="button" value="Enviar Email" class="btn btn-info btn-lg" style="margin: 0 10px;" onclick="mostrarModalCorreo()">
+    </div>
+
+    <!-- MODAL PARA PEDIR CORREO Y MOSTRAR CONTEO -->
+    <div id="modalEnvio" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 9999; text-align: center; padding-top: 10%;">
+        
+        <!-- Vista 1: Formulario de Correo con Efecto Cristal -->
+        <div id="vistaPedirCorreo" class="modal-glass-card">
+            <h2>Ingrese su correo:</h2>
+            <br>
+            <input type="email" id="inputCorreo" placeholder="escribe@tucorreo.com" style="color: #005487; padding: 10px; font-size: 18px; width: 100%; max-width: 350px; border-radius: 5px; border: 1px solid rgba(0,84,135,0.3); text-align: center; background: rgba(255,255,255,0.9); margin-bottom: 20px; outline: none;">
+            
+            <span id="mensajeError" style="color: #d9534f; font-size: 16px; font-weight: bold; display: none; margin-bottom: 15px; display: block;">Por favor ingrese un correo válido.</span>
+            
+            <div>
+                <input type="button" value="Enviar" class="btn btn-success btn-lg" style="margin-right: 15px;" onclick="iniciarDemoEnvio()">
+                <input type="button" value="Cancelar" class="btn btn-info btn-lg" onclick="cerrarModalCorreo()">
+            </div>
+        </div>
+
+        <!-- Vista 2: Conteo Regresivo -->
+        <div id="vistaConteo" style="display: none; font-size: 40px; margin-top: 5%; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);">
+        </div>
+
+    </div>
+
+<script>
+    function mostrarModalCorreo() {
+        document.getElementById('modalEnvio').style.display = 'block';
+        document.getElementById('vistaPedirCorreo').style.display = 'block';
+        document.getElementById('vistaConteo').style.display = 'none';
+        document.getElementById('mensajeError').style.display = 'none';
+        document.getElementById('inputCorreo').value = ''; 
+    }
+
+    function cerrarModalCorreo() {
+        document.getElementById('modalEnvio').style.display = 'none';
+    }
+
+    function iniciarDemoEnvio() {
+        var correo = document.getElementById('inputCorreo').value;
+        var errorMsg = document.getElementById('mensajeError');
+        
+        if (correo !== "") {
+            errorMsg.style.display = 'none';
+            
+            document.getElementById('vistaPedirCorreo').style.display = 'none';
+            var vistaConteo = document.getElementById('vistaConteo');
+            vistaConteo.style.display = 'block';
+            vistaConteo.style.color = "#ffffff"; 
+            
+            var contador = 3;
+            vistaConteo.innerHTML = "Enviando email a:<br><br><b>" + correo + "</b><br><br>" + contador + "...";
+            
+            var intervalo = setInterval(function() {
+                contador--;
+                
+                if (contador > 0) {
+                    vistaConteo.innerHTML = "Enviando email a:<br><br><b>" + correo + "</b><br><br>" + contador + "...";
+                } else if (contador === 0) {
+                    vistaConteo.innerHTML = "¡Enviado con éxito!";
+                    vistaConteo.style.color = "#4CAF50"; 
+                } else {
+                    clearInterval(intervalo);
+                    location.href = 'pagina2.html?correo=' + encodeURIComponent(correo);
+                }
+            }, 1000);
+            
+        } else {
+            errorMsg.style.display = 'block';
+        }
+    }
+</script>
+</body>
+</html>

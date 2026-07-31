@@ -1,0 +1,490 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>CAPACITACIÓN - BUENAS PRACTICAS</title>
+    <!-- Bootstrap desactivado por incompatibilidad con WebKit antiguo -->
+    <!-- <link rel="stylesheet" href="code/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="code/font-awesome.min.css">
+    <link rel="icon" type="image/png" href="icono.png">
+    
+    <style>
+        /* 1. RESET BÁSICO */
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #eef2f5; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* overflow: hidden eliminado para evitar bloqueos visuales */
+        }
+
+        /* 2. ESTRUCTURA SPA (Clásica) */
+        .seccion { display: none; width: 100%; height: 100%; }
+        .seccion.activa { display: block; }
+
+        /* 3. PORTADA CENTRADA */
+        #portada.seccion.activa {
+            background-image: url('home.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center;
+            padding-top: 150px; /* Empuja el contenido para centrarlo visualmente */
+        }
+
+        .titulo-portada {
+            font-size: 48px;
+            margin-bottom: 40px;
+            color: #005487;
+            text-shadow: 0px 0px 10px rgba(255,255,255,1), 0px 0px 20px rgba(255,255,255,1), 0px 0px 30px rgba(255,255,255,0.8);
+            text-align: center;
+            font-weight: bold;
+            padding: 0 20px;
+        }
+
+        /* 4. TARJETA OPTIMIZADA CON POSICIONAMIENTO RELATIVO */
+        .card-panel {
+            background: #ffffff;
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            width: 96%; 
+            height: 94%; 
+            max-width: 800px;
+            padding: 15px 25px; 
+            display: block; 
+            position: relative; /* Permite anclar los botones abajo */
+            margin: 15px auto; /* Centra la tarjeta */
+        }
+
+        /* 5. TIPOGRAFÍA */
+        h1, h2, h3 { margin: 0; color: #005487; }
+        .titulo-principal {
+            text-align: center;
+            font-size: 32px; 
+            margin-bottom: 10px; 
+            border-bottom: 2px solid #ff7f00;
+            padding-bottom: 5px;
+        }
+        ul { font-size: 24px; color: #333; line-height: 1.4; margin: 0 0 0 25px; }
+        ul li { margin-bottom: 8px; }
+        p, .texto-descriptivo { font-size: 24px; color: #333; text-align: justify; line-height: 1.3; margin: 0; }
+        .numero-paso { color: #00A5EA; font-weight: bold; font-size: 22px; margin-right: 5px; }
+
+        /* 6. COLUMNAS CON FLOATS (Sin Flexbox) */
+        .contenido-split {
+            display: block;
+            width: 100%;
+            overflow: hidden; /* Clearfix para los floats */
+            margin-top: 15px;
+        }
+        .columna-texto {
+            float: left;
+            width: 55%;
+            padding-right: 15px;
+        }
+        .columna-imagen {
+            float: right;
+            width: 40%;
+            text-align: center;
+        }
+        .contenido-centrado {
+            text-align: center;
+            margin-top: 20px;
+            display: block;
+        }
+        .columna-imagen img, .img-fluida {
+            max-width: 100%;
+            max-height: 200px;
+        }
+
+        /* 7. BOTONES Y NAVEGACIÓN */
+        .controles-navegacion {
+            position: absolute;
+            bottom: 20px; /* Anclado 20px arriba del borde inferior */
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .btn-touch {
+            padding: 12px 25px; 
+            font-size: 18px; 
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            min-width: 160px;
+            display: inline-block; /* Elementos en línea controlables */
+            text-align: center;
+            vertical-align: middle;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 0 10px;
+        }
+        .btn-touch:active { border: inset 1px #ccc; }
+        
+        .btn-orange { background-color: #ff7f00; }
+        .btn-green { background-color: #4CAF50; }
+        .btn-blue { background-color: #2196F3; }
+        .btn-black { background-color: #333333; }
+
+        .btn-cerrar {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            font-size: 45px;
+            color: #dc3545;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PORTADA -->
+    <div id="portada" class="seccion activa">
+        <h1 class="titulo-portada">Buenas prácticas de impresión</h1>
+        <button class="btn-touch btn-orange" style="font-size: 24px; padding: 15px 50px;" onclick="navegar('inicio')">
+            Iniciar
+        </button>
+    </div>
+
+   <!-- MENÚ PRINCIPAL -->
+    <div id="inicio" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Seleccione una opción</h1>
+            
+            <!-- CAMBIO CLAVE: Aumentamos el margin-top a 100px para empujar los botones hacia abajo -->
+            <div style="text-align: center; margin-top: 100px;">
+                <!-- También aumentamos el margin-bottom de 20px a 25px para separarlos más entre sí -->
+                <button class="btn-touch btn-green" style="width: 80%; max-width: 450px; font-size: 20px; padding: 15px; margin-bottom: 25px;" onclick="navegar('pagina2')">
+                    Prácticas de impresión
+                </button>
+                <br>
+                <button class="btn-touch btn-blue" style="width: 80%; max-width: 450px; font-size: 20px; padding: 15px; margin-bottom: 25px;" onclick="navegar('pagina6')">
+                    Prácticas Scanner
+                </button>
+                <br>
+                <button class="btn-touch btn-black" style="width: 80%; max-width: 450px; font-size: 20px; padding: 15px;" onclick="navegar('pagina9')">
+                    Cambio de suministros
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 2: Desperdicio -->
+    <div id="pagina2" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Desperdicio de papel</h1>
+            
+            <div class="contenido-split">
+                <div class="columna-texto">
+                    <ul>
+                        <li>Evitar imprimir páginas de internet.</li>
+                        <li>Evitar imprimir correos electrónicos.</li>
+                        <li>Evitar imprimir documentos personales.</li>
+                        <li>Utiliza la herramienta impresión confidencial.</li>
+                    </ul>
+                </div>
+                <div class="columna-imagen">
+                    <img src="impresora1.png" alt="Impresora" class="img-fluida">
+                </div>
+            </div>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('inicio')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina3')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 3: Doble cara -->
+    <div id="pagina3" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Impresión doble cara</h1>
+            
+            <div style="margin-top: 15px;">
+                <p>Es la impresión que se realiza utilizando ambas caras de una hoja de papel, también llamada impresión Dúplex.</p>
+                <h2 style="margin-top: 20px; font-size: 22px;">Ventajas</h2>
+                <ul style="margin-top: 10px;">
+                    <li>Genera menos impresiones.</li>
+                    <li>Contribuyes con el medio ambiente.</li>
+                    <li>Disminuye costos.</li>
+                </ul>
+            </div>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('pagina2')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina4')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 4: Confidencial -->
+    <div id="pagina4" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">¿Qué es la impresión confidencial?</h1>
+            
+            <div class="contenido-centrado">
+                <p>Es una herramienta que permite retener el archivo que se envía a la impresora para liberar la impresión únicamente en el momento que el usuario ingresa su contraseña en el panel del equipo.</p>
+                <div style="margin-top: 20px;">
+                    <img src="confidencial.png" alt="Impresora Confidencial" class="img-fluida">
+                </div>
+            </div>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('pagina3')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina5')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 5: Multipágina -->
+    <div id="pagina5" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Impresión multipágina</h1>
+            
+            <div class="contenido-centrado">
+                <p>Esta función permite agrupar y condensar múltiples páginas de un documento en una sola cara de la hoja, optimizando notablemente el uso del papel y reduciendo los costos operativos.</p>
+                <div style="margin-top: 20px;">
+                    <img src="multipagina.png" alt="Multipagina" class="img-fluida" style="max-height: 210px;">
+                </div>
+            </div>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-green" onclick="navegar('inicio')">Regresar al menú</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 6: Ganchos Scanner -->
+    <div id="pagina6" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Ganchos en scanner</h1>
+            
+            <div class="contenido-centrado">
+                <p>Al utilizar el scanner de nuestra MFP debemos tener cuidado con los ganchos que pueden llegar a quedar, ya que ellos pueden generar atascos y daños más serios en el scanner.</p>
+                
+                <table style="width: 100%; margin-top: 30px; text-align: center;">
+                    <tr>
+                        <td style="width: 33%;"><img src="clip.png" alt="Clip"></td>
+                        <td style="width: 33%;"><img src="flecha.gif" alt="Flecha"></td>
+                        <td style="width: 33%;"><img src="adf.png" alt="ADF"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('inicio')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina7')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 7: Documentos Scanner -->
+    <div id="pagina7" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Documentos en scanner</h1>
+            
+            <div class="contenido-centrado">
+                <p>Al ingresar los documentos en el alimentador automático debemos abrir la pila de hojas, para facilitar el acceso y evitar que las hojas estén pegadas una a otra.</p>
+                <div style="margin-top: 20px;">
+                    <img src="adf1.png" alt="ADF Hojas" class="img-fluida">
+                </div>
+            </div>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('pagina6')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina8')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 8: Compuerta Scanner -->
+    <div id="pagina8" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Compuerta del scanner</h1>
+            
+            <div class="contenido-centrado">
+                <p>Al abrir la compuerta del Scanner de nuestra MFP, ya sea para retirar algún tipo de atasco o realizar un mantenimiento preventivo debemos hacerlo levantando el seguro según se muestra en la siguiente imagen.</p>
+                <div style="margin-top: 20px;">
+                    <img src="adf3.gif" alt="Compuerta ADF" class="img-fluida" style="border-radius: 8px;">
+                </div>
+            </div>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-green" onclick="navegar('inicio')">Regresar al menú</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 9: Partes Toner -->
+    <div id="pagina9" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Partes del tóner</h1>
+            
+            <div class="contenido-split">
+                <div class="columna-texto">
+                    <p style="margin-bottom: 20px;"><span class="numero-paso">1</span>- Chip de memoria.</p>
+                    <p><span class="numero-paso">2</span>- Tambor de imágenes.</p>
+                </div>
+                <div class="columna-imagen">
+                    <img src="0.1.png" alt="Partes Toner" class="img-fluida">
+                </div>
+            </div>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('inicio')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina10')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 10: Sustitución 1 -->
+    <div id="pagina10" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Sustitución del cartucho</h1>
+            
+            <table style="width: 100%; margin-top: 15px; text-align: center;">
+                <tr>
+                    <td style="width: 50%; vertical-align: top; text-align: left;">
+                        <p><span class="numero-paso">1</span>- Pulse el botón de liberación.</p>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; text-align: left; padding-left: 10px;">
+                        <p><span class="numero-paso">2</span>- Abra la puerta delantera.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 15px;"><img src="imagenes/1.png" alt="Paso 1" class="img-fluida"></td>
+                    <td style="padding-top: 15px; padding-left: 10px;"><img src="imagenes/2.png" alt="Paso 2" class="img-fluida"></td>
+                </tr>
+            </table>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('pagina9')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina11')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 11: Sustitución 2 -->
+    <div id="pagina11" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Sustitución del cartucho</h1>
+            
+            <table style="width: 100%; margin-top: 15px; text-align: center;">
+                <tr>
+                    <td style="width: 50%; vertical-align: top; text-align: left;">
+                        <p><span class="numero-paso">3</span>- Sujete el asa y tire.</p>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; text-align: left; padding-left: 10px;">
+                        <p><span class="numero-paso">4</span>- Extraiga el cartucho nuevo.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 15px;"><img src="imagenes/3.png" alt="Paso 3" class="img-fluida"></td>
+                    <td style="padding-top: 15px; padding-left: 10px;"><img src="imagenes/4.png" alt="Paso 4" class="img-fluida"></td>
+                </tr>
+            </table>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('pagina10')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina12')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 12: Sustitución 3 -->
+    <div id="pagina12" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Sustitución del cartucho</h1>
+            
+            <table style="width: 100%; margin-top: 15px; text-align: center;">
+                <tr>
+                    <td style="width: 50%; vertical-align: top; text-align: left;">
+                        <p><span class="numero-paso">5</span>- Agítelo arriba y abajo.</p>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; text-align: left; padding-left: 10px;">
+                        <p><span class="numero-paso">6</span>- Alinee e introdúzcalo.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 15px;"><img src="imagenes/5.png" alt="Paso 5" class="img-fluida"></td>
+                    <td style="padding-top: 15px; padding-left: 10px;"><img src="imagenes/6.png" alt="Paso 6" class="img-fluida"></td>
+                </tr>
+            </table>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-blue" onclick="navegar('pagina11')">Regresar</button>
+                <button class="btn-touch btn-green" onclick="navegar('pagina13')">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 13: Sustitución 4 -->
+    <div id="pagina13" class="seccion">
+        <div class="card-panel">
+            <button class="btn-cerrar" onclick="window.close();">&times;</button>
+            <h1 class="titulo-principal">Sustitución del cartucho</h1>
+            
+            <table style="width: 100%; margin-top: 15px; text-align: center;">
+                <tr>
+                    <td style="width: 50%; vertical-align: top; text-align: left;">
+                        <p><span class="numero-paso">7</span>- Cierre la puerta delantera.</p>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; text-align: left; padding-left: 10px;">
+                        <p><span class="numero-paso">8</span>- Empaquete para reciclar.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 15px;"><img src="imagenes/7.png" alt="Paso 7" class="img-fluida"></td>
+                    <td style="padding-top: 15px; padding-left: 10px;"><img src="imagenes/8.png" alt="Paso 8" class="img-fluida"></td>
+                </tr>
+            </table>
+
+            <div class="controles-navegacion">
+                <button class="btn-touch btn-green" onclick="navegar('inicio')">Regresar al menú</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function navegar(idDestino) {
+            var secciones = document.querySelectorAll('.seccion');
+            for (var i = 0; i < secciones.length; i++) {
+                secciones[i].className = 'seccion'; 
+            }
+            document.getElementById(idDestino).className = 'seccion activa';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.OXPd !== undefined && window.OXPd !== null) {
+                try {
+                    window.OXPd.headerBackgroundColor = '#005487'; 
+                    window.OXPd.headerForegroundColor = '#FFFFFF';
+                    window.OXPd.footerCollapsed = true;
+                } catch (error) {
+                    // Manejo silencioso para no romper la ejecución
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

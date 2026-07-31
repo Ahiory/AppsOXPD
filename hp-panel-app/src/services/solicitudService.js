@@ -1,5 +1,7 @@
+import { apiUrl } from "../config/apiConfig.js";
+
 export async function getSolicitud(numeroSolicitud) {
-  const response = await fetch("http://localhost:3000/api/solicitud/consultar", {
+  const response = await fetch(apiUrl("/api/solicitud/consultar"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

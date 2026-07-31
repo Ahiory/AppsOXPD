@@ -1,7 +1,8 @@
 import { appState } from "../state/store.js";
+import { apiUrl } from "../config/apiConfig.js";
 
 export async function getAdjuntosExistentes(numeroSolicitud, usuarioRed = appState.usuario.usuarioRed) {
-  const response = await fetch("http://localhost:3000/api/adjuntos/consultar", {
+  const response = await fetch(apiUrl("/api/adjuntos/consultar"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

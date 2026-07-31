@@ -1,5 +1,7 @@
+import { apiUrl } from "../config/apiConfig.js";
+
 export async function validateUser(usuarioRed) {
-  const response = await fetch("http://localhost:3000/api/auth/validate", {
+  const response = await fetch(apiUrl("/api/auth/validate"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

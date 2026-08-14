@@ -1,4 +1,4 @@
-# SmartPrint - Aplicaciones HP OXPD
+# Aplicaciones HP OXPD
 
 ## 📖 Descripción del Proyecto
 Este repositorio contiene el código fuente y los recursos para **SmartPrint**, un conjunto de aplicaciones desarrolladas sobre la plataforma **HP OXPD** (Open Extensibility Platform Device). La solución está construida principalmente con bibliotecas de **JavaScript** y está diseñada para ejecutarse en el navegador embebido del panel de control de los dispositivos HP (FutureSmart).

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulador de Escáner HP</title>
+</head>
+<body style="font-family: sans-serif; padding: 20px;">
+    <h2>Simulador de Envío a receiver.php</h2>
+    
+    <!-- El enctype="multipart/form-data" es crucial para simular la impresora -->
+    <form action="receiver.php" method="POST" enctype="multipart/form-data">
+        <div style="margin-bottom: 15px;">
+            <label>1. Selecciona el archivo TXT:</label><br>
+            <input type="file" name="archivo_txt" accept=".txt" required>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label>2. Selecciona el archivo PDF:</label><br>
+            <input type="file" name="archivo_pdf" accept=".pdf" required>
+        </div>
+        
+        <button type="submit" style="padding: 10px 20px; background: #005487; color: white; border: none; cursor: pointer;">
+            Simular Escaneo
+        </button>
+    </form>
+</body>
+</html>

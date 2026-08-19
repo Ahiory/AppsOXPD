@@ -49,8 +49,19 @@ var ScanService = {
         oxpdscan.GetDefaultBasicOptions(instance.configuration.ScanSetting.TransmissionMode).then(
             function(basicOptions){
                 instance.configuration.basicOptions = basicOptions;               
+                
                 // Ocultar cuadro de diálogo nativo de HP
                 instance.configuration.basicOptions.progressDialogMode = "Off"; 
+                
+                // Habilitar escaneo a doble cara usando la propiedad correcta: plexMode
+                instance.configuration.basicOptions.plexMode = "Duplex";
+
+                // Eliminar páginas en blanco usando la propiedad correcta: blankImageRemovalMode
+                instance.configuration.basicOptions.blankImageRemovalMode = "On";
+
+                // Establecer resolución
+                instance.configuration.basicOptions.resolution = "Res300x300";
+
                 dfd.resolve();               
             }, function(err){ dfd.reject(); });
         return dfd.promise();
@@ -66,20 +77,13 @@ var ScanService = {
         return dfd.promise();
     },
 
-    // --- AQUÍ EMPIEZAN LOS CAMBIOS PARA CREACIÓN DE CARPETAS ---
-    
-    Scan: function (contextId, docType, fileNameBase, mapaTxt) {        
+    Scan: function (contextId, docType, fileNameBase, mapaTxt, configEscaneo) {        
         var dfd = new $.Deferred();
         
-        // 1. Extraemos el documento de identidad desde mapaTxt
-        // Al separar por comas, el doc_identidad AHORA queda en el índice 4
-        var arregloDatos = mapaTxt.split(',');
-        var docIdentidad = arregloDatos[4] || 'Sin_Documento';
-
-        // 2. Le pasamos el documento a la función que construye el destino
-        var destination = this.BuildScanDestination(docIdentidad);
+        // Llamamos al destino sin enviarle parámetros extra en la URL para evitar bloqueos del firmware
+        var destination = this.BuildScanDestination();
         
-        var scanTicket = this.BuildScanTicket(destination, docType, fileNameBase, mapaTxt);
+        var scanTicket = this.BuildScanTicket(destination, docType, fileNameBase, mapaTxt, configEscaneo);
 
         oxpdscan.StartScanJob(contextId, scanTicket).then(
             function(scanJobId){ dfd.resolve(scanJobId); },
@@ -90,27 +94,52 @@ var ScanService = {
         return dfd;
     },
 
-    // 3. Recibimos el docIdentidad y lo agregamos como parámetro a la URL
-    BuildScanDestination: function(docIdentidad) {
+    BuildScanDestination: function() {
         var t = instance.configuration.ScanTarget;
         
-        // Inyectamos el parámetro ?doc= al final del Endpoint
-        var uri = t.Scheme + '://' + t.Host + (t.Port ? (':' + t.Port) : '') + t.Endpoint + '?doc=' + encodeURIComponent(docIdentidad);
+        // Dejamos el Endpoint limpio, sin inyectar variables en la URL
+        var uri = t.Scheme + '://' + t.Host + (t.Port ? (':' + t.Port) : '') + t.Endpoint;
         
         return new oxpdscan.Destination(uri, t.Username, t.Password, t.Domain, t.ConnectionTimeout, t.ResponseTimeout, t.RetryCount, t.RetryInterval);
     },
 
-    BuildScanTicket: function(destination, docType, fileNameBase, mapaTxt) {
+    BuildScanTicket: function(destination, docType, fileNameBase, mapaTxt, configEscaneo) {
         if (docType == 'document') {
             instance.configuration.basicOptions.fileType = "Pdf";
             instance.configuration.fileOptions.pdfCompressionMode = "Normal";
             instance.configuration.fileOptions.tiffCompressionMode = "NotApplicable";
         }
 
-        // El contenido del TXT ahora es directamente nuestra cadena formateada
+        // --- APLICACIÓN ESTRICTA DE CONFIGURACIONES ---
+        if (configEscaneo) {
+            // 1. Resolución
+            instance.configuration.basicOptions.resolution = configEscaneo.resolucion;
+            
+            // 2. Dúplex (Aplicando plexMode y el enumerador oxpdscan.PlexMode)
+            if (configEscaneo.duplex === "Duplex") {
+                instance.configuration.basicOptions.plexMode = (typeof oxpdscan.PlexMode !== 'undefined') 
+                    ? oxpdscan.PlexMode.Duplex 
+                    : "Duplex";
+            } else {
+                instance.configuration.basicOptions.plexMode = (typeof oxpdscan.PlexMode !== 'undefined') 
+                    ? oxpdscan.PlexMode.Simplex 
+                    : "Simplex";
+            }
+
+            // 3. Páginas en blanco (Aplicando blankImageRemovalMode)
+            if (configEscaneo.blancas === "On") {
+                instance.configuration.basicOptions.blankImageRemovalMode = (typeof oxpdscan.BlankImageRemovalMode !== 'undefined')
+                    ? oxpdscan.BlankImageRemovalMode.On
+                    : "On";
+            } else {
+                instance.configuration.basicOptions.blankImageRemovalMode = (typeof oxpdscan.BlankImageRemovalMode !== 'undefined')
+                    ? oxpdscan.BlankImageRemovalMode.Off
+                    : "Off";
+            }
+        }
+
         var contenidoTxt = mapaTxt;
         
-        // Instanciamos la clase Metadata con el nombre base (ej. "18")
         var txtMetadata = new oxpdscan.Metadata(
             null, 
             fileNameBase, 
@@ -118,8 +147,7 @@ var ScanService = {
             contenidoTxt
         );
 
-        // Retornamos el ticket
-        return new oxpdscan.ScanTicket(
+        var ticket = new oxpdscan.ScanTicket(
             instance.configuration.basicOptions, 
             instance.configuration.fileOptions,
             destination,
@@ -127,5 +155,15 @@ var ScanService = {
             fileNameBase, 
             instance.configuration.ScanSetting.TransmissionMode
         );
+
+        // Imprime en el log si la impresora acepta el ticket
+        if (typeof logToScreen === 'function') {
+            oxpdscan.ValidateScanTicket(ticket).then(
+                function(validation) { logToScreen("Ticket Validado: " + (validation.isValid ? "Sí" : "No")); },
+                function(err) { logToScreen("Error validando ticket: " + err); }
+            );
+        }
+
+        return ticket;
     }
 };

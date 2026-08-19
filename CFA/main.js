@@ -9,7 +9,7 @@ var instance = {
         },
         ScanTarget: {
             Scheme: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.scheme : 'http',
-            Host: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.host : '192.168.2.3', 
+            Host: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.host : '192.168.137.1', 
             Port: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.port : 80,
             Endpoint: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.endpoint : '/CFA/receiver.php',
             Username: null, Password: null, Domain: null,
@@ -61,7 +61,7 @@ $(document).ready(function() {
 });
 
 // Cambiamos el tercer parámetro a 'mapaTxt'
-function ScanDocument(DocumentType, fileNameBase, mapaTxt) {
+function ScanDocument(DocumentType, fileNameBase, mapaTxt,configEscaneo) {
     if (instance.UIContextId === "00000000-0000-0000-0000-000000000000") {
         logToScreen("<span style='color:orange;'>Advertencia: Intentando escanear sin Contexto válido. Probablemente falle.</span>");
     }
@@ -71,7 +71,7 @@ function ScanDocument(DocumentType, fileNameBase, mapaTxt) {
     }
     
     // Le pasamos el mapa completo a ScanService
-    var dfd = ScanService.Scan(instance.UIContextId, DocumentType, fileNameBase, mapaTxt);
+    var dfd = ScanService.Scan(instance.UIContextId, DocumentType, fileNameBase, mapaTxt,configEscaneo);
     
     dfd.then(function(scanJobId) {
         instance.ScanJobId = scanJobId;

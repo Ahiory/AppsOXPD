@@ -33,7 +33,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
         // Pasamos las variables del .env a JavaScript
         var APP_CONFIG = {
             scheme: "<?php echo htmlspecialchars($env['SCAN_SCHEME'] ?? 'http'); ?>",
-            host: "<?php echo htmlspecialchars($env['SCAN_HOST'] ?? '192.168.2.3'); ?>",
+            host: "<?php echo htmlspecialchars($env['SCAN_HOST'] ?? '192.168.137.1'); ?>",
             port: <?php echo htmlspecialchars($env['SCAN_PORT'] ?? 80); ?>,
             endpoint: "<?php echo htmlspecialchars($env['SCAN_ENDPOINT'] ?? '/CFA/receiver.php'); ?>"
         };
@@ -262,6 +262,47 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
             width: 300px;
             margin: 0 auto;
         }
+
+        /* Botones Deslizables para Configuración (Compatibilidad HP OXPd) */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+        .switch input { 
+            display: none; /* Ocultamos el checkbox nativo de forma segura */
+        }
+        .slider {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            /* Usamos 'left' en vez de transform para navegadores embebidos */
+            left: 4px; 
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        /* Clases activas controladas por JS */
+        .slider.activo {
+            background-color: #009D9A;
+        }
+        .slider.activo:before {
+            left: 30px; 
+        }
     </style>
 </head>
 
@@ -450,6 +491,39 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
                 </select>
             </div>
 
+            <!-- Separador visual -->
+            <div class="form-group" style="width: 100%; border-top: 2px dashed #cbd5e1; margin-top: 10px; padding-top: 20px;">
+                <h3 style="color: #005487; font-size: 18px;">Configuración de Escaneo</h3>
+            </div>
+
+            <!-- Select de Resolución (usará el mismo menú gigante de tu app) -->
+            <div class="form-group">
+                <label>Resolución</label>
+                <select id="config_resolucion" class="real-select" style="display:none;" data-required="false">
+                    <option value="Res300x300">300 ppi (Alta Calidad)</option>
+                    <option value="Res400x400">400 ppi (Extra Calidad)</option>
+                    <option value="Res200x200">200 ppi (Normal)</option>
+                    <option value="Res150x150">150 ppi (Baja)</option>
+                </select>
+            </div>
+            <!-- Botón Dúplex -->
+            <div class="form-group" style="padding-top: 5px;">
+                <label>Doble Cara (Dúplex)</label>
+                <div class="switch">
+                    <input type="checkbox" id="config_duplex" checked>
+                    <span class="slider activo"></span>
+                </div>
+            </div>
+
+            <!-- Botón Páginas en Blanco -->
+            <div class="form-group" style="padding-top: 5px;">
+                <label>Omitir Págs. Blancas</label>
+                <div class="switch">
+                    <input type="checkbox" id="config_blancas" checked>
+                    <span class="slider activo"></span>
+                </div>
+            </div>
+
             <div style="clear: both;"></div>
         </form>
 
@@ -534,6 +608,24 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
                 // 3. Asignar el símbolo de pesos
                 $(this).val("$ " + formateado);
             });
+
+            // --- AQUÍ AGREGAMOS EL CÓDIGO PARA LOS BOTONES TÁCTILES HP ---
+            $('.switch').on('click', function () {
+                var $input = $(this).find('input');
+                var $slider = $(this).find('.slider');
+                
+                // Si estaba encendido, lo apagamos
+                if ($input.prop('checked')) {
+                    $input.prop('checked', false);
+                    $slider.removeClass('activo');
+                } 
+                // Si estaba apagado, lo encendemos
+                else {
+                    $input.prop('checked', true);
+                    $slider.addClass('activo');
+                }
+            });
+            // --------------------------------------------------------------
         });
 
         function abrirMenuGigante($select, $fakeSelect) {
@@ -677,9 +769,15 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
 
                 // Nombre de archivos 
                 var fileNameBase = oficinaVal;
+                // --- NUEVO: Capturar configuraciones de los botones ---
+                var configEscaneo = {
+                    resolucion: $('#config_resolucion').val() || "Res300x300",
+                    duplex: $('#config_duplex').is(':checked') ? "Duplex" : "Simplex",
+                    blancas: $('#config_blancas').is(':checked') ? "On" : "Off"
+                };
 
                 // Pasamos la cadena completa (mapaTxt) a la función principal
-                ScanDocument('document', fileNameBase, mapaTxt);
+                ScanDocument('document', fileNameBase, mapaTxt,configEscaneo);
             } else {
                 $('#error-msg').show();
             }
@@ -692,6 +790,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
             window.OXPd.headerForegroundColor = '#FFFFFF';
             window.OXPd.footerCollapsed = true;
         }
+        
     </script>
 </body>
 

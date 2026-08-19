@@ -50,6 +50,7 @@ var ScanService = {
             function(basicOptions){
                 instance.configuration.basicOptions = basicOptions;               
                 
+                
                 // Ocultar cuadro de diálogo nativo de HP
                 instance.configuration.basicOptions.progressDialogMode = "Off"; 
                 
@@ -103,6 +104,7 @@ var ScanService = {
         return new oxpdscan.Destination(uri, t.Username, t.Password, t.Domain, t.ConnectionTimeout, t.ResponseTimeout, t.RetryCount, t.RetryInterval);
     },
 
+    BuildScanTicket: function(destination, docType, fileNameBase, mapaTxt, configEscaneo) {
     BuildScanTicket: function(destination, docType, fileNameBase, mapaTxt, configEscaneo) {
         if (docType == 'document') {
             instance.configuration.basicOptions.fileType = "Pdf";

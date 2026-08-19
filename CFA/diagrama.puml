@@ -13,25 +13,26 @@ skinparam rectangle {
 
 package "Capa de Presentación (Impresora HP con OXPd)" {
     rectangle "Frontend HTML/JS\n(UI Fábrica de Créditos)" as Front <<HP>>
-    rectangle "SDK OXPd JS\n(oxpdscan / oxpddiscovery)" as SDK <<HP>>
-    rectangle "Escáner Físico\n(Hardware)" as Scan <<HP>>
+    rectangle "SDK OXPd JS\n(scanService.js)" as SDK <<HP>>
+    rectangle "Escáner Físico\n(Hardware OXPd)" as Scan <<HP>>
 }
 
-package "Capa de Servidor (Backend PHP)" {
-    rectangle "Receptor HTTP\n(receiver.php)" as API <<PHP>>
+package "Capa de Servidor (Backend PHP) Apache" {
     rectangle "Configuración\n(.env)" as Env <<PHP>>
+    rectangle "Receptor HTTP\n(receiver.php)" as API <<PHP>>
 }
 
-package "Almacenamiento Local (Windows)" {
-    node "Sistema de Archivos\n(Ej: C:\\Users\\...\\ScanHp\\)" as FS <<Storage>>
+package "Almacenamiento Local (Red/Windows)" {
+    node "Sistema de Archivos SMB\n(poseidon)" as FS <<Storage>>
 }
 
-Front --> SDK : Envía mapaTxt y config de escaneo
-SDK <--> Scan : Inicializa ScanTicket\n(PDF + archivo .txt)
-Scan --> API : POST Multipart HTTP\n(Parámetro ?doc=)
+Front --> SDK : Envía 'mapaTxt' (cadena CSV) y config. escaneo
+SDK -> Scan : (Endpoint limpio + txtMetadata)
+Scan -> API : POST Multipart form-data\n(Archivos .pdf y .txt integrados)
 
 Env .> API : Inyecta variable SAVE_PATH
-API --> FS : mkdir() (Crea carpeta por Doc. Identidad)
-API --> FS : move_uploaded_file()\n(Guarda PDF y TXT)
+API -> API : Lee archivo .txt temporal\n(Extrae Oficina y Doc. Identidad)
+API --> FS : mkdir()\n(Ruta: poseidon / Oficina / Doc_Identidad /)
+API --> FS : move_uploaded_file()\n(Guarda .pdf y .txt)
 
 @enduml

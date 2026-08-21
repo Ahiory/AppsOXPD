@@ -29,7 +29,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
 
     <script type="text/javascript">
         var INJECTED_CONTEXT_ID = "<?php echo htmlspecialchars($contextId); ?>";
-        
+
         // Pasamos las variables del .env a JavaScript
         var APP_CONFIG = {
             scheme: "<?php echo htmlspecialchars($env['SCAN_SCHEME'] ?? 'http'); ?>",
@@ -39,8 +39,8 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
         };
     </script>
 
-    <script src="main.js?v=<?php echo time(); ?>"></script>
-    <script src="scanService.js?v=<?php echo time(); ?>"></script>
+    <script src="main.js?v=<?php echo filemtime(__DIR__ . '/main.js'); ?>"></script>
+    <script src="scanService.js?v=<?php echo filemtime(__DIR__ . '/scanService.js'); ?>"></script>
 
 
     <style>
@@ -272,36 +272,45 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
             margin-top: 5px;
             cursor: pointer;
         }
-        .switch input { 
-            display: none; /* Ocultamos el checkbox nativo de forma segura */
+
+        .switch input {
+            display: none;
+            /* Ocultamos el checkbox nativo de forma segura */
         }
+
         .slider {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: #cbd5e1;
             -webkit-transition: 0.4s;
             transition: 0.4s;
             border-radius: 34px;
         }
+
         .slider:before {
             position: absolute;
             content: "";
             height: 26px;
             width: 26px;
             /* Usamos 'left' en vez de transform para navegadores embebidos */
-            left: 4px; 
+            left: 4px;
             bottom: 4px;
             background-color: white;
             -webkit-transition: 0.4s;
             transition: 0.4s;
             border-radius: 50%;
         }
+
         /* Clases activas controladas por JS */
         .slider.activo {
             background-color: #009D9A;
         }
+
         .slider.activo:before {
-            left: 30px; 
+            left: 30px;
         }
     </style>
 </head>
@@ -443,19 +452,26 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
 
             <div class="form-group">
                 <label for="doc_identidad">Doc. Identidad Cliente</label>
-                <input type="number" id="doc_identidad" class="form-control val-input" placeholder="Número de documento"
-                    onkeydown="if(['e', 'E', '+', '-'].includes(event.key)) event.preventDefault();"
-                    oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);">
+                <input type="tel" id="doc_identidad" class="form-control val-input" placeholder="Número de documento"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 15);">
             </div>
 
             <div class="form-group">
                 <label>Tipo Documento <span class="required">*</span></label>
                 <select id="tipo_documento" class="real-select" style="display:none;" data-required="true">
                     <option value="">Seleccione tipo...</option>
-                    <option value="CC">Cédula de Ciudadanía</option>
-                    <option value="CE">Cédula de Extranjería</option>
-                    <option value="TI">TI</option>
-                    <option value="PA">Pasaporte</option>
+                    <option value="1">Solicitud de Crédito Solicitante</option>
+                    <option value="2">Documento de Identidad</option>
+                    <option value="3">Documentación Financiera Solicitante</option>
+                    <option value="7">Solicitud Codeudor u Otro 1</option>
+                    <option value="8">Documentación Financiera Codeudor u Otros 1</option>
+                    <option value="12">Solicitud Codeudor u otro 2</option>
+                    <option value="13">Documentación Financiera Codeudor u Otro 2</option>
+                    <option value="18">Documentación Financiera Codeudor u Otro 3</option>
+                    <option value="24">Pagaré</option>
+                    <option value="30">Tratamientos de Datos</option>
+                    <option value="34">Proyecto Planificación</option>
+                    <option value="36">Informe de Visita y/o Confirmación de Arriendos</option>
                 </select>
             </div>
 
@@ -492,7 +508,8 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
             </div>
 
             <!-- Separador visual -->
-            <div class="form-group" style="width: 100%; border-top: 2px dashed #cbd5e1; margin-top: 10px; padding-top: 20px;">
+            <div class="form-group"
+                style="width: 100%; border-top: 2px dashed #cbd5e1; margin-top: 10px; padding-top: 20px;">
                 <h3 style="color: #005487; font-size: 18px;">Configuración de Escaneo</h3>
             </div>
 
@@ -613,12 +630,12 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
             $('.switch').on('click', function () {
                 var $input = $(this).find('input');
                 var $slider = $(this).find('.slider');
-                
+
                 // Si estaba encendido, lo apagamos
                 if ($input.prop('checked')) {
                     $input.prop('checked', false);
                     $slider.removeClass('activo');
-                } 
+                }
                 // Si estaba apagado, lo encendemos
                 else {
                     $input.prop('checked', true);
@@ -627,6 +644,9 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
             });
             // --------------------------------------------------------------
         });
+
+        // Variable global para recordar dónde estaba el usuario
+        var scrollPosicion = 0;
 
         function abrirMenuGigante($select, $fakeSelect) {
             var $overlay = $('#touchOverlay');
@@ -657,14 +677,19 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
             $cancelBtn.on('click', cerrarMenuGigante);
             $optionsContainer.append($cancelBtn);
 
+            // NUEVO: Guardar la posición actual antes de ocultar la tarjeta principal
+            scrollPosicion = $(window).scrollTop();
+
             $('.card-container').hide();
             $overlay.show();
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0); // Esto sube el menú gigante para que se lea desde arriba
         }
 
         function cerrarMenuGigante() {
             $('#touchOverlay').hide();
             $('.card-container').show();
+            // NUEVO: Restaurar el scroll a la posición exacta donde estaba el campo
+            window.scrollTo(0, scrollPosicion);
         }
 
         function mostrarCargando() {
@@ -753,22 +778,23 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
 
                 // Nuevo campo: Número del documento de fábrica
                 // TODO: Vincular a un select en la UI (ej. $('#tipo_doc_fabrica').val())
-                var numDocFabrica = "1";
+                // Capturamos el valor (1, 2, 7, 24, etc.) del select "Tipo Documento"
+                var numDocFabrica = $('#tipo_documento').val();
 
-                // Construir la cadena del mapa separada por comas en el NUEVO ORDEN
+                // Construir la cadena del mapa separada por comas exactamente en el orden requerido
                 var mapaTxt = [
                     oficinaVal,       // 0: Número de oficina
                     lineaCredito,     // 1: Línea de crédito
                     montoSolicitado,  // 2: Monto solicitado
                     codCliente,       // 3: Código de asociado
                     docIdentidad,     // 4: Cédula o nit
-                    numDocFabrica,    // 5: Número del documento de fábrica
+                    numDocFabrica,    // 5: Número del documento de fábrica (1, 2, 3...)
                     asesor,           // 6: Código de Asesor
                     tipoPersona       // 7: Pn o PJ
                 ].join(",");
 
-                // Nombre de archivos 
-                var fileNameBase = oficinaVal;
+                // El nombre base de ambos archivos (PDF y TXT) será el id del tipo de documento
+                var fileNameBase = numDocFabrica;
                 // --- NUEVO: Capturar configuraciones de los botones ---
                 var configEscaneo = {
                     resolucion: $('#config_resolucion').val() || "Res300x300",
@@ -777,7 +803,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
                 };
 
                 // Pasamos la cadena completa (mapaTxt) a la función principal
-                ScanDocument('document', fileNameBase, mapaTxt,configEscaneo);
+                ScanDocument('document', fileNameBase, mapaTxt, configEscaneo);
             } else {
                 $('#error-msg').show();
             }
@@ -790,7 +816,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
             window.OXPd.headerForegroundColor = '#FFFFFF';
             window.OXPd.footerCollapsed = true;
         }
-        
+
     </script>
 </body>
 

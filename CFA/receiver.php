@@ -2,54 +2,78 @@
 // 1. Leemos el archivo de configuración .env
 $env = parse_ini_file(__DIR__ . '/.env');
 
-// 2. Obtenemos la ruta base desde el .env
-// (Se mantiene un fallback por seguridad, puedes quitarlo si prefieres que sea estricto)
-$base_dir = isset($env['SAVE_PATH']) ? $env['SAVE_PATH'] : "C:\\Users\\esnsanma\\Desktop\\ScanHp\\";
+// 2. Obtenemos la ruta base
+$base_dir = isset($env['SAVE_PATH']) ? $env['SAVE_PATH'] : "C:\\Users\\esnsanma.CARVAJAL\\Desktop\\ScanHp\\";
 
-// 3. Obtenemos el número de documento desde la URL (enviado por JS)
-$doc_identidad = isset($_GET['doc']) && $_GET['doc'] !== '' ? $_GET['doc'] : 'Sin_Documento';
+// Valores por defecto
+$oficina = 'Sin_Oficina';
+$doc_identidad = 'Sin_Documento';
+$tipo_doc = 'Documento';
 
-// 4. Configuramos la ruta final concatenando la ruta base y la carpeta del documento
-// rtrim limpia barras sobrantes y DIRECTORY_SEPARATOR pone la barra correcta (\ en Windows, / en Linux)
-$target_dir = rtrim($base_dir, "\\/") . DIRECTORY_SEPARATOR . $doc_identidad . DIRECTORY_SEPARATOR;
+// NUEVO: Variable de control para saber si TODO el proceso fue exitoso
+$guardado_exitoso = true; 
 
-// 5. Creamos la carpeta del documento si no existe (0777 otorga permisos, true permite subcarpetas)
-if (!file_exists($target_dir)) {
-    mkdir($target_dir, 0777, true);
-}
-
-// 6. La impresora HP envía el archivo como un POST multipart
 if (!empty($_FILES)) {
+    
+    // PASO A: Extraer datos del TXT
     foreach ($_FILES as $key => $file) {
-        // Obtenemos el nombre original
-        $filename = basename($file["name"]);
-        
-        // Expresión regular para limpiar cualquier sufijo numérico (-01) de HP
-        $filename = preg_replace('/[-_]\d+(\.[a-zA-Z0-9]+)$/', '$1', $filename);
-        
-        // Ahora guardamos el archivo en la subcarpeta que acabamos de crear
-        $target_file = $target_dir . $filename;
-        
-        if (move_uploaded_file($file["tmp_name"], $target_file)) {
-            echo "<p style='color:green;'>Archivo guardado: " . $target_file . "</p>";
-        } else {
-            // Imprime el error si no puede mover el archivo
-            echo "<p style='color:red;'>Error al guardar el archivo: " . $target_file . " (Verifica permisos de red)</p>";
+        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+        if (strtolower($ext) === 'txt') {
+            $contenido = file_get_contents($file['tmp_name']);
+            $datos = explode(',', $contenido);
+            
+            if (isset($datos[0]) && trim($datos[0]) !== '') $oficina = trim($datos[0]);
+            if (isset($datos[4]) && trim($datos[4]) !== '') $doc_identidad = trim($datos[4]);
+            if (isset($datos[5]) && trim($datos[5]) !== '') $tipo_doc = trim($datos[5]);
+            break; 
+        }
+    }
+
+    // PASO B: Construir y crear ruta
+    $target_dir = rtrim($base_dir, "\\/") . DIRECTORY_SEPARATOR . $oficina . DIRECTORY_SEPARATOR . $doc_identidad . DIRECTORY_SEPARATOR;
+    
+    if (!file_exists($target_dir)) {
+        if (!mkdir($target_dir, 0777, true)) {
+            $guardado_exitoso = false; // Falló al crear la carpeta
+        }
+    }
+
+    // PASO C: Mover archivos solo si la carpeta existe/fue creada
+    if ($guardado_exitoso) {
+        foreach ($_FILES as $key => $file) {
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = $tipo_doc . '.' . strtolower($ext);
+            $target_file = $target_dir . $filename;
+            
+            if (!move_uploaded_file($file["tmp_name"], $target_file)) {
+                $guardado_exitoso = false; // Falló al mover el archivo a la ruta final
+            }
         }
     }
 } else {
-    // Si la impresora lo envía crudo en el body
+    // Escaneo raw
     $input = file_get_contents('php://input');
     if (!empty($input)) {
         $target_dir = rtrim($base_dir, "\\/") . DIRECTORY_SEPARATOR . $oficina . DIRECTORY_SEPARATOR . $doc_identidad . DIRECTORY_SEPARATOR;
-        if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
+        if (!file_exists($target_dir) && !mkdir($target_dir, 0777, true)) {
+            $guardado_exitoso = false;
+        }
         
         $filename = "ScanRaw_" . time() . ".pdf";
-        file_put_contents($target_dir . $filename, $input);
+        if ($guardado_exitoso && file_put_contents($target_dir . $filename, $input) === false) {
+             $guardado_exitoso = false;
+        }
+    } else {
+        $guardado_exitoso = false; // No llegó ningún archivo
     }
 }
 
-// 7. HP requiere que el servidor responda con un 200 OK
-http_response_code(200);
-echo "Recibido";
+// NUEVO: Respuesta estricta hacia la impresora HP
+if ($guardado_exitoso) {
+    http_response_code(200);
+    echo "Recibido y guardado exitosamente";
+} else {
+    http_response_code(500); // Esto fuerza a la impresora a detectar un fallo de transmisión
+    echo "Error interno: No se pudo guardar en la ruta de red";
+}
 ?>

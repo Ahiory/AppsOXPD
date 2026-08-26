@@ -1,56 +1,37 @@
 @startuml
-' --- CONFIGURACIÓN DE DISEÑO ---
-top to bottom direction
+!define RECTANGLE class
 
 skinparam componentStyle uml2
-
-' Configuración de color para los rectángulos (HP y PHP)
 skinparam rectangle {
     BackgroundColor<<HP>> #0096D6
     FontColor<<HP>> White
-    
     BackgroundColor<<PHP>> #5C6BC0
     FontColor<<PHP>> White
-}
-
-' Configuración de color específica para Bases de Datos (Storage)
-skinparam database {
-    BackgroundColor<<Storage>> #0add69
+    BackgroundColor<<Storage>> #E5A91A
     FontColor<<Storage>> White
 }
 
-' --- ESTRUCTURA DE COMPONENTES ---
-
-' "node" da la apariencia de una caja 3D, ideal para hardware como tu impresora
-node "Capa de Presentación (Impresora HP con OXPd Pantalla)" {
+package "Capa de Presentación (Impresora HP con OXPd)" {
     rectangle "Frontend HTML/JS\n(UI Fábrica de Créditos)" as Front <<HP>>
-    rectangle "SDK OXPd JS\n(scanService.js)" as SDK <<HP>>
-    rectangle "Escáner Físico\n(Hardware OXPd)" as Scan <<HP>>
+    rectangle "SDK OXPd JS\n(oxpdscan / oxpddiscovery)" as SDK <<HP>>
+    rectangle "Escáner Físico\n(Hardware)" as Scan <<HP>>
 }
 
-' "node" también es el estándar para representar Servidores
-node "Capa de Servidor Cliente 10.92.1.57 (Backend PHP Xamp) Apache" {
-    rectangle "Configuración global\n(.env)" as Env <<PHP>>
-    rectangle "Receptor HTTP \n(receiver.php)" as API <<PHP>>
+package "Capa de Servidor (Backend PHP)" {
+    rectangle "Receptor HTTP\n(receiver.php)" as API <<PHP>>
+    rectangle "Configuración\n(.env)" as Env <<PHP>>
 }
 
-' "folder" da la apariencia de un directorio, perfecto para tu entorno SMB en Windows
-folder "Almacenamiento Local (Red/Windows) poseidon 10.91.1.29 SMB" {
-    database "Sistema de Archivos SMB\n(poseidon)" as FS <<Storage>>
+package "Almacenamiento Local (Windows)" {
+    node "Sistema de Archivos\n(Ej: C:\\Users\\...\\ScanHp\\)" as FS <<Storage>>
 }
 
-' --- RELACIONES Y FLUJO ---
+Front --> SDK : Envía mapaTxt y config de escaneo
+SDK <--> Scan : Inicializa ScanTicket\n(PDF + archivo .txt)
+Scan --> API : POST Multipart HTTP\n(Parámetro ?doc=)
 
-Front --> SDK : Envía 'mapaTxt' (cadena CSV)\ny config. escaneo
-SDK -> Scan : (Endpoint limpio + txtMetadata)
-
-' Usamos una flecha un poco más larga (--->) para dar respiro al diagrama
-Scan ---> API : POST prueba text.html)
-
-Env ..> API : Inyecta variable SAVE_PATH
-API -> API : Lee archivo .txt temporal\n(Extrae Oficina y Doc. Identidad para enviar a storage)
-
-API ---> FS : Envia documento\n(Ruta:poseidon/Oficina/Doc_Identidad/)
-API ---> FS : Prueba manual text.html\n(Guarda .pdf y .txt)
+Env .> API : Inyecta variable SAVE_PATH
+API --> FS : mkdir() (Crea carpeta por Doc. Identidad)
+API --> FS : move_uploaded_file()\n(Guarda PDF y TXT)
 
 @enduml

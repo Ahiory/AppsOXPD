@@ -712,6 +712,11 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
         }
 
         function resetApp() {
+            document.getElementById('scanForm').reset();
+            $('.fake-select').each(function () {
+                var defaultText = $(this).prev('.real-select').find('option:first').text();
+                $(this).text(defaultText).removeClass('has-value').css('border-color', '#cbd5e1');
+            });
             $('#statusOverlay').hide();
             window.scrollTo(0, 0);
         }

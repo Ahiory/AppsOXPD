@@ -68,7 +68,12 @@ if (!empty($_FILES)) {
     }
 }
 
-// 7. HP requiere que el servidor responda con un 200 OK
-http_response_code(200);
-echo "Recibido";
+// NUEVO: Respuesta estricta hacia la impresora HP
+if ($guardado_exitoso) {
+    http_response_code(200);
+    echo "Recibido y guardado exitosamente";
+} else {
+    http_response_code(500); // Esto fuerza a la impresora a detectar un fallo de transmisión
+    echo "Error interno: No se pudo guardar en la ruta de red";
+}
 ?>

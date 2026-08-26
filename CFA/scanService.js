@@ -62,7 +62,7 @@ var ScanService = {
                 // Establecer resolución
                 instance.configuration.basicOptions.resolution = "Res300x300";
 
-                // NUEVO: Configurar escáner para detectar mezcla de hojas Carta y Oficio
+                 // NUEVO: Configurar escáner para detectar mezcla de hojas Carta y Oficio
                 instance.configuration.basicOptions.originalSize = "MixedLetterLegal";
 
                 dfd.resolve();               

@@ -1,0 +1,1 @@
+net use \\IP_DE_TU_LINUX\img_ricoh /user:scanuser tu_contraseña /persistent:yes

@@ -50,7 +50,6 @@ var ScanService = {
             function(basicOptions){
                 instance.configuration.basicOptions = basicOptions;               
                 
-                
                 // Ocultar cuadro de diálogo nativo de HP
                 instance.configuration.basicOptions.progressDialogMode = "Off"; 
                 
@@ -62,6 +61,9 @@ var ScanService = {
 
                 // Establecer resolución
                 instance.configuration.basicOptions.resolution = "Res300x300";
+
+                // NUEVO: Configurar escáner para detectar mezcla de hojas Carta y Oficio
+                instance.configuration.basicOptions.originalSize = "MixedLetterLegal";
 
                 dfd.resolve();               
             }, function(err){ dfd.reject(); });
@@ -104,7 +106,6 @@ var ScanService = {
         return new oxpdscan.Destination(uri, t.Username, t.Password, t.Domain, t.ConnectionTimeout, t.ResponseTimeout, t.RetryCount, t.RetryInterval);
     },
 
-    BuildScanTicket: function(destination, docType, fileNameBase, mapaTxt, configEscaneo) {
     BuildScanTicket: function(destination, docType, fileNameBase, mapaTxt, configEscaneo) {
         if (docType == 'document') {
             instance.configuration.basicOptions.fileType = "Pdf";

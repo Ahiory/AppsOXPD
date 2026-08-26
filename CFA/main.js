@@ -86,15 +86,24 @@ function monitorearEscaneo(jobId) {
         
         var state = status.resultCode || status.ResultCode || status.state;
         
-        if (state === 'Pending' || state === oxpdscan.ResultCode.Pending) {
+        // Agregamos 'Processing' por si la HP usa ese estado intermedio
+        if (state === 'Pending' || state === oxpdscan.ResultCode.Pending || state === 'Processing') {
             setTimeout(function() { monitorearEscaneo(jobId); }, 2000);
         } else if (state === 'Succeeded' || state === oxpdscan.ResultCode.Succeeded) {
             if (typeof mostrarExito === 'function') mostrarExito();
         } else {
+            // NUEVO: Oculta el "cargando" y muestra el error real al asesor
             logToScreen("Finalizado con estado: " + state);
+            if (typeof mostrarError === 'function') {
+                mostrarError("No se pudo guardar el archivo. Verifica la ruta de red poseidon. (Estado HP: " + state + ")");
+            }
         }
         
     }, function(err) {
-        if (typeof mostrarExito === 'function') mostrarExito();
+        // CORRECCIÓN: Ahora muestra error en lugar de mostrarExito()
+        logToScreen("Error consultando estado: " + err);
+        if (typeof mostrarError === 'function') {
+            mostrarError("Error interno al comunicarse con el escáner.");
+        }
     });
 }

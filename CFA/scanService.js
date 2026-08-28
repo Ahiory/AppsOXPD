@@ -53,17 +53,18 @@ var ScanService = {
                 // Ocultar cuadro de diálogo nativo de HP
                 instance.configuration.basicOptions.progressDialogMode = "Off"; 
                 
-                // Habilitar escaneo a doble cara usando la propiedad correcta: plexMode
+                // Habilitar escaneo a doble cara usando la propiedad correcta
                 instance.configuration.basicOptions.plexMode = "Duplex";
 
-                // Eliminar páginas en blanco usando la propiedad correcta: blankImageRemovalMode
+                // Eliminar páginas en blanco usando la propiedad correcta
                 instance.configuration.basicOptions.blankImageRemovalMode = "On";
 
                 // Establecer resolución
                 instance.configuration.basicOptions.resolution = "Res300x300";
 
-                 // NUEVO: Configurar escáner para detectar mezcla de hojas Carta y Oficio
-                instance.configuration.basicOptions.originalSize = "MixedLetterLegal";
+                // NUEVO: Configurar escáner para detectar mezcla de hojas Carta y Oficio (Legal)
+                instance.configuration.basicOptions.mediaSize = "MixedLetterLegal";
+
 
                 dfd.resolve();               
             }, function(err){ dfd.reject(); });
@@ -117,6 +118,11 @@ var ScanService = {
         if (configEscaneo) {
             // 1. Resolución
             instance.configuration.basicOptions.resolution = configEscaneo.resolucion;
+            
+            // NUEVO: Tamaño de papel (Carta, Oficio o Mixto)
+            if (configEscaneo.tamano) {
+                instance.configuration.basicOptions.mediaSize = configEscaneo.tamano;
+            }
             
             // 2. Dúplex (Aplicando plexMode y el enumerador oxpdscan.PlexMode)
             if (configEscaneo.duplex === "Duplex") {

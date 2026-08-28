@@ -513,7 +513,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
                 <h3 style="color: #005487; font-size: 18px;">Configuración de Escaneo</h3>
             </div>
 
-            <!-- Select de Resolución (usará el mismo menú gigante de tu app) -->
+            <!-- Select de Resolución -->
             <div class="form-group">
                 <label>Resolución</label>
                 <select id="config_resolucion" class="real-select" style="display:none;" data-required="false">
@@ -523,6 +523,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
                     <option value="Res150x150">150 ppi (Baja)</option>
                 </select>
             </div>
+
             <!-- Botón Dúplex -->
             <div class="form-group" style="padding-top: 5px;">
                 <label>Doble Cara (Dúplex)</label>
@@ -530,6 +531,16 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
                     <input type="checkbox" id="config_duplex" checked>
                     <span class="slider activo"></span>
                 </div>
+            </div>
+
+            <!-- NUEVO: Select de Tamaño de Papel -->
+            <div class="form-group">
+                <label>Tamaño de Papel</label>
+                <select id="config_tamano" class="real-select" style="display:none;" data-required="false">
+                    <option value="MixedLetterLegal">Automático (Mixto)</option>
+                    <option value="Letter">Carta</option>
+                    <option value="Legal">Oficio</option>
+                </select>
             </div>
 
             <!-- Botón Páginas en Blanco -->
@@ -712,11 +723,6 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
         }
 
         function resetApp() {
-            document.getElementById('scanForm').reset();
-            $('.fake-select').each(function () {
-                var defaultText = $(this).prev('.real-select').find('option:first').text();
-                $(this).text(defaultText).removeClass('has-value').css('border-color', '#cbd5e1');
-            });
             $('#statusOverlay').hide();
             window.scrollTo(0, 0);
         }
@@ -798,6 +804,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
                 // --- NUEVO: Capturar configuraciones de los botones ---
                 var configEscaneo = {
                     resolucion: $('#config_resolucion').val() || "Res300x300",
+                    tamano: $('#config_tamano').val() || "MixedLetterLegal", 
                     duplex: $('#config_duplex').is(':checked') ? "Duplex" : "Simplex",
                     blancas: $('#config_blancas').is(':checked') ? "On" : "Off"
                 };

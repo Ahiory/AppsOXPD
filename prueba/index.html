@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Diagnóstico OXPd</title>
+    <!-- Librerías requeridas -->
+    <script src="libs/jquery-1.11.0.min.js"></script>
+    <script src="libs/oxpddiscovery-2.6.0.min.js"></script>
+    <script src="libs/oxpddeviceinfo-2.6.0.min.js"></script>
+    <script src="libs/oxpdprint-2.6.0.min.js"></script>
+    <script src="libs/oxpdscan-2.6.0.min.js"></script>
+    <script src="main.js"></script>
+</head>
+
+<body onload="getManufacturerInfo();">
+    <div style="position: absolute; top: 1%; left: 5%;">
+       <font style="color: black; font-size: 150%;" face="arial, verdana">
+        <h2>Diagnóstico de Librerías HP OXPd</h2>
+       </font>
+    </div>
+    
+    <!-- PANEL DE ESTADO DE LAS LIBRERÍAS (Lo que te dirá cuál falla) -->
+    <div style="position: absolute; top: 15%; left: 50%; padding: 10px; border: 2px solid #ccc; background-color: #f9f9f9;">
+        <h3>Estado de las APIs:</h3>
+        <p>1. Discovery API: <strong id="statusDiscovery">Probando...</strong></p>
+        <p>2. DeviceInfo API: <strong id="statusDeviceInfo">Esperando...</strong></p>
+        <p>3. Print API: <strong id="statusPrint">Esperando...</strong></p>
+        <p>4. Scan API: <strong id="statusScan">Esperando...</strong></p>
+    </div>
+
+    <!-- PANEL DE DATOS BÁSICOS -->
+    <div style="position: absolute; top: 15%; left: 5%;">
+        <font style="color: black;">
+            <p>Serial: <strong id="SerialNumber">Cargando...</strong></p>
+            <p>Host Name: <strong id="hostName">Cargando...</strong></p>
+            <p>Firmware: <strong id="firmwareVersion">Cargando...</strong></p>
+            <p>Formatter: <strong id="formatterSerialNumber">Cargando...</strong></p>
+            <p>IP: <strong id="ipAddress">Cargando...</strong></p>
+            <p>Mac: <strong id="macAddress">Cargando...</strong></p> 
+            <p>Device ID: <strong id="deviceId">Cargando...</strong></p>
+        </font>
+    </div>
+
+    <input style="position: absolute; top: 85%; left: 45%; padding: 10px 20px;" type="button" value="Cerrar Diagnóstico" onClick="window.close()"/>
+</body>
+</html>

@@ -428,6 +428,7 @@ if (isset($_SERVER['HTTP_OXPD_UICONTEXTID'])) {
                     <option value="PREAPROBADOS">PREAPROBADOS</option>
                     <option value="PRODUCTIVO TASA FIJA">PRODUCTIVO TASA FIJA</option>
                     <option value="PRODUCTIVO TASA VARIABLE">PRODUCTIVO TASA VARIABLE</option>
+                    <option value="QUIPU">QUIPU</option>
                     <option value="RETANQUEO">RETANQUEO</option>
                     <option value="RETENCION ASOCIADO (CREDIAPORTES)">RETENCION ASOCIADO (CREDIAPORTES)</option>
                     <option value="SEGUROS PROVISION">SEGUROS PROVISION</option>
